@@ -45,6 +45,8 @@
 				}
 			}
 
+
+
 			function getPolygons(sourceID, nameField) {
 				layerID = map.getSource(sourceID).vectorLayerIds[0];
 				features = map.querySourceFeatures(sourceID, {'sourceLayer': layerID})
@@ -328,8 +330,8 @@ map.on('load', function () {
 						'visibleOnLoad': false, // set this optional argument to true to have the layer visible on load. Leave out or set to false to have it hidden on load
 						'usedInZoomControl': true // set this optional argument to true if this layer will be used in the Zoom to Districts control, otherwise leave it out or set it to false.
 					}
-				);		
-				
+				);
+
 				addVectorLayer(
 					map,
 					{
@@ -428,10 +430,10 @@ map.on('load', function () {
 		  map.on('mouseenter', 'charter-schools-v2', showPopup);
 		  map.on('mouseleave', 'charter-schools-v2', hidePopup);
 
-*/		  
-		  
+*/
+
 			runWhenLoadComplete();
-		
+
 
 		}); // end of map.on(load) block
 
