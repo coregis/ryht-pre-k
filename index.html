@@ -36,11 +36,11 @@
 			function populateZoomControl(selectID, sourceID, fieldName, layerName) {
 				polygons = getPolygons(sourceID, fieldName);
 				var select = document.getElementById(selectID);
-				select.options[0] = new Option(layerName);
+				select.options[0] = new Option(layerName, "-108,25,-88,37,0");
 				for (i in polygons) {
 					select.options[select.options.length] = new Option(
 						polygons[i].name,
-						polygons[i].bbox
+						polygons[i].bbox.toString() + ',' + polygons[i].name
 					);
 				}
 			}
