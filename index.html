@@ -18,6 +18,22 @@
 		</style>
 
 	<script>
+	//Adding showHide functionality from legislative map to this map
+
+		function showHideLayer(layerName, markerName, showOnly=false, hideOnly=false) {
+			var visibility = map.getLayoutProperty(layerName, 'visibility');
+				if ((visibility === 'visible' || hideOnly) && !showOnly) {
+					map.setLayoutProperty(layerName, 'visibility', 'none');
+					this.className = '';
+					document.getElementById(markerName).classList.add('inactive');
+				} else {
+					this.className = 'active';
+					map.setLayoutProperty(layerName, 'visibility', 'visible');
+					document.getElementById(markerName).classList.remove('inactive');
+			}
+		}
+	
+	
 		//These are the four functions written by Eldan that power the zoom-to-district feature
 	// runWhenLoadComplete() checks if the map has finished loading data, and once it has then it calls the next one.
 	//populateZoomControl() fills the dropdowns with options generated from reading the data layers for all the district names.
@@ -175,20 +191,20 @@
 
 <div id='map'></div>
 
-<div class='legend'>
-	<div class='legend-title'>Pre-Kindergarten Program Types by District</div>
-		<!--<div class='legend-subtitle'>Dollars per Average Daily Attendance (ADA)*</div>-->
-			<div class='legend-scale'>
-				  <ul class='legend-labels'>
-					<li><span style='background:#ffffd6;'></span>No Data</li>
-					<li><span style='background:#fed990;'></span>Half-day Only</li>
-					<li><span style='background:#fe9b2a;'></span>Full-day Only</li>
-					<li><span style='background:#d35c0d;'></span>Full and Half-Day</li>
-				  </ul>
-			</div>
-		<div class='legend-source'>Source: Based on data provided from Raise Your Hand Texas</div>
-		<div class='map-credit'>Map design by <a href="http://www.coregis.net/"  target="_blank">CORE GIS</a></div>
-	</div>
+			<div class='legend'>
+				<div class='legend-title'>Pre-Kindergarten Program Types by District</div>
+				<div class='legend-subtitle'>Click on a category below to toggle its visibility</div>
+				<div class='legend-scale'>
+					<ul class='legend-labels'>
+						<li onClick="showHideLayer('pre-k-nodata', markerName='pre_k_nodata_marker');"><span id="pre_k_nodata" class="inactive"></span>No Data</li>
+						<li onClick="showHideLayer('pre-k-halfday-only', markerName='pre_k_halfday_only_marker');"><span id="pre_k_halfday" class="inactive"></span>Half-Day Only</li>
+						<li onClick="showHideLayer('pre-k-full-and-half-day', markerName='pre_k_full_and_half_day_marker');"><span id="pre_k_full_and_half_day" class="inactive"></span>Full and Half-Day</li>
+						<li onClick="showHideLayer('pre-k-full-day-only', markerName='pre_k_full_day_only_marker');"><span id="pre_k_full_day_only" class="inactive"></span>Full-Day Only</li>
+					</ul>
+				</div> <!-- end of div class='legend-scale' -->
+				<div class='legend-source'>Source: <a href="https://www.raiseyourhandtexas.org/" target="_blank">Raise Your Hand Texas</a></div>
+				<div class='map-credit'>Map design by <a href="http://www.coregis.net/" target="_blank">CORE GIS</a></div>
+			</div> <!-- end of div id="legend" -->
 </div>
 
 <script>
@@ -330,22 +346,79 @@ map.on('load', function () {
 					}
 				);
 
+
+				//These are the four individual categories of Pre-K data corresponding to the four legend entries
 				addVectorLayer(
 					map,
 					{
-						'sourceName': 'state-senate-districts',
-						'sourceID': 'state_senate_districts-0g2odu',
-						'sourceURL': 'mapbox://core-gis.b2eu90mx',
-						'lineLayerName': 'state-senate-districts-lines',
-						'lineColor': '#a1b082',
-						'legendID': 'state_senate_districts',
-						'displayBehind': 'pre_k_districts',
-						'polygonLayerName': 'state-senate-districts-poly',
-						'polygonFillColor': 'rgba(200, 100, 240, 0)',
-						'polygonOutlineColor': 'rgba(200, 100, 240, 0)',
+						'sourceName': 'pre-k-nodata',
+						'sourceID': 'pre_k_no_data',
+						'sourceURL': 'mapbox://core-gis.4vac5fpz',
+						'lineLayerName': 'pre-k-nodata-lines',
+						'lineColor': '#67411e',
+						'legendID': 'pre-k-nodata',
+						'displayBehind': 'hillshade_highlight_bright',
+						'polygonLayerName': 'pre-k-nodata-poly',
+						'polygonFillColor': 'rgba(124, 124, 124, 100)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
 						'usedInZoomControl': true
 					}
 				);
+
+				addVectorLayer(
+					map,
+					{
+						'sourceName': 'pre-k-halfday-only',
+						'sourceID': 'pre_k_half_day_only',
+						'sourceURL': 'mapbox://core-gis.7z91uq20',
+						'lineLayerName': 'pre-k-halfday-lines',
+						'lineColor': '#67411e',
+						'legendID': 'pre-k-halfday',
+						'displayBehind': 'hillshade_highlight_bright',
+						'polygonLayerName': 'pre-k-halfday-poly',
+						'polygonFillColor': 'rgba(254, 217, 144, 100)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'usedInZoomControl': true
+					}
+				);	
+				
+				
+				addVectorLayer(
+					map,
+					{
+						'sourceName': 'pre-k-full-and-half-day',
+						'sourceID': 'pre_k_full_and_half_day',
+						'sourceURL': 'mapbox://core-gis.51xz9mev',
+						'lineLayerName': 'pre-k-full-and-half-day-lines',
+						'lineColor': '#67411e',
+						'legendID': 'pre-k-full-and-half-day',
+						'displayBehind': 'hillshade_highlight_bright',
+						'polygonLayerName': 'pre-k-full-and-half-day-poly',
+						'polygonFillColor': 'rgba(254, 155, 42, 100)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'usedInZoomControl': true
+					}
+				);
+
+				
+				addVectorLayer(
+					map,
+					{
+						'sourceName': 'pre-k-full-day-only',
+						'sourceID': 'pre_k_full_day_only',
+						'sourceURL': 'mapbox://core-gis.bplke3vy',
+						'lineLayerName': 'pre-k-full-day-only-lines',
+						'lineColor': '#67411e',
+						'legendID': 'pre-k-full-day-only',
+						'displayBehind': 'hillshade_highlight_bright',
+						'polygonLayerName': 'pre-k-full-day-only-poly',
+						'polygonFillColor': 'rgba(211, 92, 13, 100)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'usedInZoomControl': true
+					}
+				);
+				
+				//END Pre-K categories
 
 				addVectorLayer(
 					map,
@@ -356,7 +429,7 @@ map.on('load', function () {
 						'lineLayerName': 'state-house-districts-lines',
 						'lineColor': 'rgba(117, 137, 77, 0.5)',
 						'legendID': 'state_house_districts',
-						'displayBehind': 'pre_k_districts',
+						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'state-house-districts-poly',
 						'polygonFillColor': 'rgba(200, 100, 240, 0)',
 						'polygonOutlineColor': 'rgba(200, 100, 240, 0)',
@@ -393,42 +466,6 @@ map.on('load', function () {
 		//this will return the string to the calling function
 
 	}
-
-/*
-	//Popup on hover
-
-
-		  // Create a popup, but don't add it to the map yet.
-		  var popup = new mapboxgl.Popup({
-			closeButton: false,
-			closeOnClick: false
-		  });
-
-		  function showPopup(e) {
-			// Updates the cursor to a hand (interactivity)
-			map.getCanvas().style.cursor = 'pointer';
-
-			// Show the popup at the coordinates with some data
-			popup.setLngLat(e.features[0].geometry.coordinates)
-			  .setHTML(checkEmpty(e.features[0].properties.CAMPNAME))
-			  .addTo(map);
-		  }
-
-		  function hidePopup() {
-			map.getCanvas().style.cursor = '';
-			popup.remove();
-		  }
-
-		  function checkEmpty(info) {
-			return (info) ? info : "No data";
-		  }
-
-		// CHANGE: Add layer names that need to be interactive
-
-		  map.on('mouseenter', 'charter-schools-v2', showPopup);
-		  map.on('mouseleave', 'charter-schools-v2', hidePopup);
-
-*/
 
 			runWhenLoadComplete();
 
