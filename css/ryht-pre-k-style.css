@@ -105,7 +105,7 @@ ul{
 	right:0;
     text-align: left;
     margin-bottom: 5px;
-	padding: 0px 0px 8px 0px;
+	padding: 0px 0px 2px 0px;
 	font-family: "Montserrat", helvetica, arial, sans-serif;
     font-weight: bold;
     font-size: 90%;
@@ -116,6 +116,7 @@ ul{
 	right:0;
     text-align: left;
     margin-bottom: 5px;
+	padding: 0px 0px 12px 0px;
 	font-family: "Montserrat", helvetica, arial, sans-serif;
     font-style: italic;
     font-size: 75%;
@@ -156,7 +157,7 @@ ul{
     width: 24px;
     margin-right: 5px;
     margin-left: 0;
-    border: 1px solid #999;
+    border: 0px solid #999;
     }
   .legend .legend-source {
     width: 175 px;
@@ -285,6 +286,39 @@ ul{
 	background:url(../markers/state_senate_districts.svg) left center;
 	width:11px;
 	height:16px;
+	display: block;
+	float: left;
+}
+
+#pre_k_nodata
+{
+	background:url(../markers/pre_k_nodata_marker.svg) left center;
+	width:28px;
+	height:12px;
+	display: block;
+	float: left;
+}
+#pre_k_halfday
+{
+	background:url(../markers/pre_k_halfday_only_marker.svg) left center;
+	width:28px;
+	height:14px;
+	display: block;
+	float: left;
+}
+#pre_k_full_and_half_day
+{
+	background:url(../markers/pre_k_full_and_half_day_marker.svg) left center;
+	width:28px;
+	height:14px;
+	display: block;
+	float: left;
+}
+#pre_k_full_day_only
+{
+	background:url(../markers/pre_k_full_day_only_marker.svg) left center;
+	width:28px;
+	height:14px;
 	display: block;
 	float: left;
 }
