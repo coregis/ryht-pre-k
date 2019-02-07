@@ -21,19 +21,21 @@
 	//Adding showHide functionality from legislative map to this map
 
 		function showHideLayer(layerName, markerName, showOnly=false, hideOnly=false) {
+			console.log(layerName, markerName);
 			var visibility = map.getLayoutProperty(layerName, 'visibility');
-				if ((visibility === 'visible' || hideOnly) && !showOnly) {
-					map.setLayoutProperty(layerName, 'visibility', 'none');
-					this.className = '';
-					document.getElementById(markerName).classList.add('inactive');
-				} else {
-					this.className = 'active';
-					map.setLayoutProperty(layerName, 'visibility', 'visible');
-					document.getElementById(markerName).classList.remove('inactive');
+			console.log(visibility);
+			if ((visibility === 'visible' || hideOnly) && !showOnly) {
+				map.setLayoutProperty(layerName, 'visibility', 'none');
+				this.className = '';
+				document.getElementById(markerName).classList.add('inactive');
+			} else {
+				this.className = 'active';
+				map.setLayoutProperty(layerName, 'visibility', 'visible');
+				document.getElementById(markerName).classList.remove('inactive');
 			}
 		}
-	
-	
+
+
 		//These are the four functions written by Eldan that power the zoom-to-district feature
 	// runWhenLoadComplete() checks if the map has finished loading data, and once it has then it calls the next one.
 	//populateZoomControl() fills the dropdowns with options generated from reading the data layers for all the district names.
@@ -196,10 +198,10 @@
 				<div class='legend-subtitle'>Click on a category below to toggle its visibility</div>
 				<div class='legend-scale'>
 					<ul class='legend-labels'>
-						<li onClick="showHideLayer('pre-k-nodata', markerName='pre_k_nodata_marker');"><span id="pre_k_nodata" class="inactive"></span>No Data</li>
-						<li onClick="showHideLayer('pre-k-halfday-only', markerName='pre_k_halfday_only_marker');"><span id="pre_k_halfday" class="inactive"></span>Half-Day Only</li>
-						<li onClick="showHideLayer('pre-k-full-and-half-day', markerName='pre_k_full_and_half_day_marker');"><span id="pre_k_full_and_half_day" class="inactive"></span>Full and Half-Day</li>
-						<li onClick="showHideLayer('pre-k-full-day-only', markerName='pre_k_full_day_only_marker');"><span id="pre_k_full_day_only" class="inactive"></span>Full-Day Only</li>
+						<li onClick="showHideLayer('pre-k-nodata-poly', markerName='pre_k_nodata_marker');"><span id="pre_k_nodata" class="inactive"></span>No Data</li>
+						<li onClick="showHideLayer('pre-k-halfday-poly', markerName='pre_k_halfday_only_marker');"><span id="pre_k_halfday" class="inactive"></span>Half-Day Only</li>
+						<li onClick="showHideLayer('pre-k-full-and-half-day-poly', markerName='pre_k_full_and_half_day_marker');"><span id="pre_k_full_and_half_day" class="inactive"></span>Full and Half-Day</li>
+						<li onClick="showHideLayer('pre-k-full-day-only-poly', markerName='pre_k_full_day_only_marker');"><span id="pre_k_full_day_only" class="inactive"></span>Full-Day Only</li>
 					</ul>
 				</div> <!-- end of div class='legend-scale' -->
 				<div class='legend-source'>Source: <a href="https://www.raiseyourhandtexas.org/" target="_blank">Raise Your Hand Texas</a></div>
@@ -380,9 +382,9 @@ map.on('load', function () {
 						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
 						'usedInZoomControl': true
 					}
-				);	
-				
-				
+				);
+
+
 				addVectorLayer(
 					map,
 					{
@@ -400,7 +402,7 @@ map.on('load', function () {
 					}
 				);
 
-				
+
 				addVectorLayer(
 					map,
 					{
@@ -417,7 +419,7 @@ map.on('load', function () {
 						'usedInZoomControl': true
 					}
 				);
-				
+
 				//END Pre-K categories
 
 				addVectorLayer(
