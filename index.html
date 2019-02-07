@@ -21,9 +21,7 @@
 	//Adding showHide functionality from legislative map to this map
 
 		function showHideLayer(layerName, markerName, showOnly=false, hideOnly=false) {
-			console.log(layerName, markerName);
 			var visibility = map.getLayoutProperty(layerName, 'visibility');
-			console.log(visibility);
 			if ((visibility === 'visible' || hideOnly) && !showOnly) {
 				map.setLayoutProperty(layerName, 'visibility', 'none');
 				this.className = '';
