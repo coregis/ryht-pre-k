@@ -41,7 +41,7 @@
 	//zoomToPolygon() zooms the map to the district extent
 
 			function runWhenLoadComplete() {
-				if (!map.loaded()) {
+				if (!map.loaded() || !map.getLayer('texas-school-districts-poly')) {
 					setTimeout(runWhenLoadComplete, 100);
 				}
 				else {
