@@ -284,8 +284,8 @@ var map = new mapboxgl.Map({
 								'line-color': params.lineColor,
 								'line-width': 1
 							},
+						'displayBehind': params.displayBehind
 						},
-						params.displayBehind
 					);
 				}
 				if ((params.polygonLayerName !== undefined) && (params.polygonLayerName !== false)) {
@@ -326,7 +326,7 @@ map.on('load', function () {
 			'fill-color': 'rgba(200, 100, 240, 0)',
             'fill-outline-color': 'rgba(200, 100, 240, 0)'
 			}
-	});
+		},);
 
 				addVectorLayer(
 					map,
@@ -337,7 +337,7 @@ map.on('load', function () {
 						'lineLayerName': 'texas-school-districts-lines', // OPTIONAL name we'll use for the layer that shows the outlines. Leave out or set to false if you don't want outlines displayed.
 						'lineColor': '#a1b082', // colour to draw those outlines with; safe to leave out if we're not drawing outlines, but must be explicitly set if we are
 						'legendID': 'texas_school_districts', // OPTIONAL: the id in the legend, so we can set it to active or inactive as appropriate. Simply leave out for layers that don't appear in the legend
-						'displayBehind': 'pre_k_districts', // ID of another existing layer, which Mapbox will make sure this one gets drawn behind
+						'displayBehind': 'hillshade_highlight_bright', // ID of another existing layer, which Mapbox will make sure this one gets drawn behind
 						'polygonLayerName': 'texas-school-districts-poly', // OPTIONAL name we'll use for the layer that invisibly stores the polygon extents. Needed if we're either going to add this layer to either the zoom to districts control or set click events (e.g. popups) on it.	Leave out or set to false if you don't want one.
 						'polygonFillColor': 'rgba(200, 100, 240, 0)', // colour to fill polygons with. Needed if there's going to be a polygon layer; simply leave out if not.
 						'polygonOutlineColor': 'rgba(200, 100, 240, 0)', // colour to draw polygon boundaries with. Needed if there's going to be a polygon layer; simply leave out if not.
@@ -359,10 +359,10 @@ map.on('load', function () {
 						'legendID': 'pre-k-nodata',
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-nodata-poly',
-						'polygonFillColor': 'rgba(124, 124, 124, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonFillColor': 'rgba(124, 124, 124, 1)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 100)',
 						'usedInZoomControl': true
-					}
+					},
 				);
 
 				addVectorLayer(
@@ -377,9 +377,9 @@ map.on('load', function () {
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-halfday-poly',
 						'polygonFillColor': 'rgba(254, 217, 144, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 100)',
 						'usedInZoomControl': true
-					}
+					}, 
 				);
 
 
@@ -395,9 +395,9 @@ map.on('load', function () {
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-full-and-half-day-poly',
 						'polygonFillColor': 'rgba(254, 155, 42, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 100)',
 						'usedInZoomControl': true
-					}
+					}, 
 				);
 
 
@@ -413,9 +413,9 @@ map.on('load', function () {
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-full-day-only-poly',
 						'polygonFillColor': 'rgba(211, 92, 13, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 100)',
 						'usedInZoomControl': true
-					}
+					},
 				);
 
 				//END Pre-K categories
