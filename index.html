@@ -46,6 +46,15 @@
 				}
 				else {
 					populateZoomControl("school-districts-control", "texas-school-districts", "NAME", "Texas School Districts");
+					map.moveLayer('texas-school-districts-lines', 'country-label-sm');
+					map.moveLayer('texas-school-districts-poly', 'texas-school-districts-lines');
+					for (i=0; i < loadedLineLayers.length; i++) {
+						if (loadedLineLayers[i][1] !== "texas_school_districts") {
+							console.log(i, loadedLineLayers[i], loadedPolygonLayers[i]);
+							map.moveLayer(loadedLineLayers[i][0], 'texas-school-districts-poly');
+							map.moveLayer(loadedPolygonLayers[i][0], loadedLineLayers[i][0]);
+						}
+					}
 				}
 			}
 
@@ -325,17 +334,20 @@ map.on('load', function () {
 		});
 		//Add a map layer for charter schools
 
-	map.addLayer({
-		"id":"pre_k_districts",
-		"type":"fill",
-		"source":"pre_k_districts",
-		"source-layer":"pre_k_by_district",
-		"layout":{		},
-		"paint":{
-			'fill-color': 'rgba(200, 100, 240, 0)',
-            'fill-outline-color': 'rgba(200, 100, 240, 0)'
+	map.addLayer(
+		{
+			"id":"pre_k_districts",
+			"type":"fill",
+			"source":"pre_k_districts",
+			"source-layer":"pre_k_by_district",
+			"layout":{		},
+			"paint": {
+				'fill-color': 'rgba(200, 100, 240, 0)',
+				 'fill-outline-color': 'rgba(200, 100, 240, 0)'
 			}
-	});
+		},
+		'country-label-sm'
+	);
 
 				addVectorLayer(
 					map,
