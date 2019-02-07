@@ -22,14 +22,19 @@
 
 		function showHideLayer(layerName, markerName, showOnly=false, hideOnly=false) {
 			var visibility = map.getLayoutProperty(layerName, 'visibility');
+			console.log(layerName, markerName, showOnly, hideOnly, visibility);
 			if ((visibility === 'visible' || hideOnly) && !showOnly) {
 				map.setLayoutProperty(layerName, 'visibility', 'none');
 				this.className = '';
-				document.getElementById(markerName).classList.add('inactive');
+				if (markerName !== '') {
+					document.getElementById(markerName).classList.add('inactive');
+				}
 			} else {
 				this.className = 'active';
 				map.setLayoutProperty(layerName, 'visibility', 'visible');
-				document.getElementById(markerName).classList.remove('inactive');
+				if (markerName !== '') {
+					document.getElementById(markerName).classList.remove('inactive');
+				}
 			}
 		}
 
@@ -50,7 +55,6 @@
 					map.moveLayer('texas-school-districts-poly', 'texas-school-districts-lines');
 					for (i=0; i < loadedLineLayers.length; i++) {
 						if (loadedLineLayers[i][1] !== "texas_school_districts") {
-							console.log(i, loadedLineLayers[i], loadedPolygonLayers[i]);
 							map.moveLayer(loadedLineLayers[i][0], 'texas-school-districts-poly');
 							map.moveLayer(loadedPolygonLayers[i][0], loadedLineLayers[i][0]);
 						}
@@ -58,16 +62,22 @@
 				}
 			}
 
+			var oversizedTexasBounds = "-108,25,-88,37";
+
 			function populateZoomControl(selectID, sourceID, fieldName, layerName) {
 				polygons = getPolygons(sourceID, fieldName);
 				var select = document.getElementById(selectID);
-				select.options[0] = new Option(layerName, "-108,25,-88,37");
+				select.options[0] = new Option(layerName, oversizedTexasBounds);
 				for (i in polygons) {
 					select.options[select.options.length] = new Option(
 						polygons[i].name,
 						polygons[i].bbox
 					);
 				}
+				map.setLayoutProperty(sourceID + '-poly', 'visibility', 'none');
+// IMPORTANT: these paint properties define the appearance of the mask layer that deemphasises districts outside the one we've zoomed to.  They will overrule anything that's set when that mask layer was loaded.
+				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(200, 200, 200, 0.7)');
+				map.setPaintProperty(sourceID + '-poly', 'fill-outline-color', 'rgba(200, 200, 200, 0.1)');
 			}
 
 			function getPolygons(sourceID, nameField) {
@@ -136,14 +146,21 @@
 				return [[minX, minY], [maxX, maxY]];
 			}
 
-			function zoomToPolygon(sourceID, coords) {
-				if (typeof coords !== 'undefined') {
-					coords = coords.split(",");
+			function zoomToPolygon(sourceID, coordsString) {
+				if (typeof coordsString !== 'undefined') {
+					var coords = coordsString.split(",");
 					bbox = [
 						[coords[0], coords[1]],
 						[coords[2], coords[3]]
 					];
 					map.fitBounds(bbox, options={padding: 10, duration: 5000});
+					if (coordsString === oversizedTexasBounds) { // if we're zooming out to the whole state again
+						showHideLayer('texas-school-districts-poly', markerName='', showOnly=false, hideOnly=true);
+						showHideLayer('texas-school-districts-lines', markerName='', showOnly=false, hideOnly=true);
+					} else {
+						showHideLayer('texas-school-districts-poly', markerName='', showOnly=true);
+						showHideLayer('texas-school-districts-lines', markerName='', showOnly=true);
+					}
 				}
 			}
 		</script>
