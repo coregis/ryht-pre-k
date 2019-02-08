@@ -74,8 +74,8 @@
 				}
 				map.setLayoutProperty(sourceID + '-poly', 'visibility', 'none');
 // IMPORTANT: these paint properties define the appearance of the mask layer that deemphasises districts outside the one we've zoomed to.  They will overrule anything that's set when that mask layer was loaded.
-				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(200, 200, 200, 0.7)');
-				map.setPaintProperty(sourceID + '-poly', 'fill-outline-color', 'rgba(200, 200, 200, 0.1)');
+				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(200, 200, 200, 0.5)');
+				map.setPaintProperty(sourceID + '-lines', 'line-color', 'rgba(50, 50, 50, .7)');
 			}
 
 			function getPolygons(sourceID, nameField) {
@@ -157,8 +157,13 @@
 						showHideLayer('texas-school-districts-poly', markerName='', showOnly=false, hideOnly=true);
 						showHideLayer('texas-school-districts-lines', markerName='', showOnly=false, hideOnly=true);
 					} else {
+						console.log(coords[4]);
 						showHideLayer('texas-school-districts-poly', markerName='', showOnly=true);
 						showHideLayer('texas-school-districts-lines', markerName='', showOnly=true);
+						map.setFilter(
+							'texas-school-districts-poly',
+							['!=', 'NAME', coords[4]]
+						);
 					}
 				}
 			}
@@ -495,6 +500,7 @@ map.on('load', function () {
     });
 
 	function fillpopup(data){
+		console.log(data);
 		var html = "";
 		html = html + "<span class='varname'>District Name: </span> <span class='attribute'>" + data.SchDistNam + "</span>";
 		html = html + "<br>"
