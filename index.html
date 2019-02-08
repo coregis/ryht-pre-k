@@ -459,22 +459,6 @@ map.on('load', function () {
 
 				//END Pre-K categories
 
-				addVectorLayer(
-					map,
-					{
-						'sourceName': 'state-house-districts',
-						'sourceID': 'state_house_districts-1vl4x8',
-						'sourceURL': 'mapbox://core-gis.9drnaiu0',
-						'lineLayerName': 'state-house-districts-lines',
-						'lineColor': 'rgba(117, 137, 77, 0.5)',
-						'legendID': 'state_house_districts',
-						'displayBehind': 'hillshade_highlight_bright',
-						'polygonLayerName': 'state-house-districts-poly',
-						'polygonFillColor': 'rgba(200, 100, 240, 0)',
-						'polygonOutlineColor': 'rgba(200, 100, 240, 0)',
-						'usedInZoomControl': true
-					}
-				);
 
 	// When a click event occurs on a feature in the pre-k districts layer, open a popup at the
     // location of the click, with description HTML from its properties.
