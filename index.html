@@ -22,7 +22,6 @@
 
 		function showHideLayer(layerName, markerName, showOnly=false, hideOnly=false) {
 			var visibility = map.getLayoutProperty(layerName, 'visibility');
-			console.log(layerName, markerName, showOnly, hideOnly, visibility);
 			if ((visibility === 'visible' || hideOnly) && !showOnly) {
 				map.setLayoutProperty(layerName, 'visibility', 'none');
 				this.className = '';
@@ -147,7 +146,6 @@
 			function zoomToPolygon(sourceID, coords) {
 				if (typeof coords !== 'undefined') {
 					coords = coords.split(",");
-					console.log(coords);
 					bbox = [
 						[coords[0], coords[1]],
 						[coords[2], coords[3]]
@@ -157,7 +155,6 @@
 						showHideLayer('texas-school-districts-poly', markerName='', showOnly=false, hideOnly=true);
 						showHideLayer('texas-school-districts-lines', markerName='', showOnly=false, hideOnly=true);
 					} else {
-						console.log(coords[4]);
 						showHideLayer('texas-school-districts-poly', markerName='', showOnly=true);
 						showHideLayer('texas-school-districts-lines', markerName='', showOnly=true);
 						map.setFilter(
@@ -486,7 +483,6 @@ map.on('load', function () {
             .setLngLat(e.lngLat)
             .setHTML(fillpopup(e.features[0].properties))
             .addTo(map);
-		console.log(e.features[0].properties);
     });
 
 	 // Change the cursor to a pointer when the mouse is over the districts layer.
@@ -500,7 +496,6 @@ map.on('load', function () {
     });
 
 	function fillpopup(data){
-		console.log(data);
 		var html = "";
 		html = html + "<span class='varname'>District Name: </span> <span class='attribute'>" + data.SchDistNam + "</span>";
 		html = html + "<br>"
