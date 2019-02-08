@@ -62,16 +62,14 @@
 				}
 			}
 
-			var oversizedTexasBounds = "-108,25,-88,37";
-
 			function populateZoomControl(selectID, sourceID, fieldName, layerName) {
 				polygons = getPolygons(sourceID, fieldName);
 				var select = document.getElementById(selectID);
-				select.options[0] = new Option(layerName, oversizedTexasBounds);
+				select.options[0] = new Option(layerName, "-108,25,-88,37,whole state of Texas");
 				for (i in polygons) {
 					select.options[select.options.length] = new Option(
 						polygons[i].name,
-						polygons[i].bbox
+						polygons[i].bbox.toString() + ',' + polygons[i].name
 					);
 				}
 				map.setLayoutProperty(sourceID + '-poly', 'visibility', 'none');
@@ -146,15 +144,16 @@
 				return [[minX, minY], [maxX, maxY]];
 			}
 
-			function zoomToPolygon(sourceID, coordsString) {
-				if (typeof coordsString !== 'undefined') {
-					var coords = coordsString.split(",");
+			function zoomToPolygon(sourceID, coords) {
+				if (typeof coords !== 'undefined') {
+					coords = coords.split(",");
+					console.log(coords);
 					bbox = [
 						[coords[0], coords[1]],
 						[coords[2], coords[3]]
 					];
 					map.fitBounds(bbox, options={padding: 10, duration: 5000});
-					if (coordsString === oversizedTexasBounds) { // if we're zooming out to the whole state again
+					if (coords[4] === "whole state of Texas") { // if we're zooming out to the whole state again
 						showHideLayer('texas-school-districts-poly', markerName='', showOnly=false, hideOnly=true);
 						showHideLayer('texas-school-districts-lines', markerName='', showOnly=false, hideOnly=true);
 					} else {
