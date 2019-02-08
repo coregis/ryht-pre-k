@@ -25,11 +25,15 @@
 			if ((visibility === 'visible' || hideOnly) && !showOnly) {
 				map.setLayoutProperty(layerName, 'visibility', 'none');
 				this.className = '';
-				document.getElementById(markerName).classList.add('inactive');
+				if (markerName !== '') {
+					document.getElementById(markerName).classList.add('inactive');
+				}
 			} else {
 				this.className = 'active';
 				map.setLayoutProperty(layerName, 'visibility', 'visible');
-				document.getElementById(markerName).classList.remove('inactive');
+				if (markerName !== '') {
+					document.getElementById(markerName).classList.remove('inactive');
+				}
 			}
 		}
 
@@ -41,24 +45,36 @@
 	//zoomToPolygon() zooms the map to the district extent
 
 			function runWhenLoadComplete() {
-				if (!map.loaded()) {
+				if (!map.loaded() || !map.getLayer('texas-school-districts-poly')) {
 					setTimeout(runWhenLoadComplete, 100);
 				}
 				else {
 					populateZoomControl("school-districts-control", "texas-school-districts", "NAME", "Texas School Districts");
+					map.moveLayer('texas-school-districts-lines', 'country-label-sm');
+					map.moveLayer('texas-school-districts-poly', 'texas-school-districts-lines');
+					for (i=0; i < loadedLineLayers.length; i++) {
+						if (loadedLineLayers[i][1] !== "texas_school_districts") {
+							map.moveLayer(loadedLineLayers[i][0], 'texas-school-districts-poly');
+							map.moveLayer(loadedPolygonLayers[i][0], loadedLineLayers[i][0]);
+						}
+					}
 				}
 			}
 
 			function populateZoomControl(selectID, sourceID, fieldName, layerName) {
 				polygons = getPolygons(sourceID, fieldName);
 				var select = document.getElementById(selectID);
-				select.options[0] = new Option(layerName, "-108,25,-88,37");
+				select.options[0] = new Option(layerName, "-108,25,-88,37,whole state of Texas");
 				for (i in polygons) {
 					select.options[select.options.length] = new Option(
 						polygons[i].name,
-						polygons[i].bbox
+						polygons[i].bbox.toString() + ',' + polygons[i].name
 					);
 				}
+				map.setLayoutProperty(sourceID + '-poly', 'visibility', 'none');
+// IMPORTANT: these paint properties define the appearance of the mask layer that deemphasises districts outside the one we've zoomed to.  They will overrule anything that's set when that mask layer was loaded.
+				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(200, 200, 200, 0.5)');
+				map.setPaintProperty(sourceID + '-lines', 'line-color', 'rgba(50, 50, 50, .7)');
 			}
 
 			function getPolygons(sourceID, nameField) {
@@ -135,6 +151,17 @@
 						[coords[2], coords[3]]
 					];
 					map.fitBounds(bbox, options={padding: 10, duration: 5000});
+					if (coords[4] === "whole state of Texas") { // if we're zooming out to the whole state again
+						showHideLayer('texas-school-districts-poly', markerName='', showOnly=false, hideOnly=true);
+						showHideLayer('texas-school-districts-lines', markerName='', showOnly=false, hideOnly=true);
+					} else {
+						showHideLayer('texas-school-districts-poly', markerName='', showOnly=true);
+						showHideLayer('texas-school-districts-lines', markerName='', showOnly=true);
+						map.setFilter(
+							'texas-school-districts-poly',
+							['!=', 'NAME', coords[4]]
+						);
+					}
 				}
 			}
 		</script>
@@ -237,6 +264,9 @@ var map = new mapboxgl.Map({
 				}
 			}
 
+			var loadedLineLayers = [];
+			var loadedPolygonLayers = [];
+
 			function addPointLayer(map, params) {
 				gus_api(params.gusID, function(jsondata) {
 					var visibilityState = setVisibilityState(params);
@@ -287,6 +317,9 @@ var map = new mapboxgl.Map({
 						},
 						params.displayBehind
 					);
+					if (params.legendID !== undefined) {
+						loadedLineLayers.push([params.lineLayerName, params.legendID]);
+					}
 				}
 				if ((params.polygonLayerName !== undefined) && (params.polygonLayerName !== false)) {
 					if (params.usedInZoomControl) { visibilityState = 'visible'; }
@@ -305,6 +338,9 @@ var map = new mapboxgl.Map({
 							},
 						}
 					);
+					if (params.legendID !== undefined) {
+						loadedPolygonLayers.push([params.polygonLayerName, params.legendID]);
+					}
 				}
 			}
 
@@ -316,17 +352,20 @@ map.on('load', function () {
 		});
 		//Add a map layer for charter schools
 
-	map.addLayer({
-		"id":"pre_k_districts",
-		"type":"fill",
-		"source":"pre_k_districts",
-		"source-layer":"pre_k_by_district",
-		"layout":{		},
-		"paint":{
-			'fill-color': 'rgba(200, 100, 240, 0)',
-            'fill-outline-color': 'rgba(200, 100, 240, 0)'
+	map.addLayer(
+		{
+			"id":"pre_k_districts",
+			"type":"fill",
+			"source":"pre_k_districts",
+			"source-layer":"pre_k_by_district",
+			"layout":{		},
+			"paint": {
+				'fill-color': 'rgba(200, 100, 240, 0)',
+				 'fill-outline-color': 'rgba(200, 100, 240, 0)'
 			}
-	});
+		},
+		'country-label-sm'
+	);
 
 				addVectorLayer(
 					map,
@@ -420,22 +459,6 @@ map.on('load', function () {
 
 				//END Pre-K categories
 
-				addVectorLayer(
-					map,
-					{
-						'sourceName': 'state-house-districts',
-						'sourceID': 'state_house_districts-1vl4x8',
-						'sourceURL': 'mapbox://core-gis.9drnaiu0',
-						'lineLayerName': 'state-house-districts-lines',
-						'lineColor': 'rgba(117, 137, 77, 0.5)',
-						'legendID': 'state_house_districts',
-						'displayBehind': 'hillshade_highlight_bright',
-						'polygonLayerName': 'state-house-districts-poly',
-						'polygonFillColor': 'rgba(200, 100, 240, 0)',
-						'polygonOutlineColor': 'rgba(200, 100, 240, 0)',
-						'usedInZoomControl': true
-					}
-				);
 
 	// When a click event occurs on a feature in the pre-k districts layer, open a popup at the
     // location of the click, with description HTML from its properties.
@@ -444,7 +467,6 @@ map.on('load', function () {
             .setLngLat(e.lngLat)
             .setHTML(fillpopup(e.features[0].properties))
             .addTo(map);
-		console.log(e.features[0].properties);
     });
 
 	 // Change the cursor to a pointer when the mouse is over the districts layer.
