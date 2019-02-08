@@ -43,6 +43,8 @@
 	//populateZoomControl() fills the dropdowns with options generated from reading the data layers for all the district names.
 	//getIDsList() does the actual work of fetching the district names
 	//zoomToPolygon() zooms the map to the district extent
+	//SETTING DRAW ORDER:  specify the layer below which lines and polygons will draw using map.moveLayer
+	//NOTE:  need to use the Mapbox layer ID from the basemap style for the second argument in map.moveLayer
 
 			function runWhenLoadComplete() {
 				if (!map.loaded() || !map.getLayer('texas-school-districts-poly')) {
@@ -50,7 +52,7 @@
 				}
 				else {
 					populateZoomControl("school-districts-control", "texas-school-districts", "NAME", "Texas School Districts");
-					map.moveLayer('texas-school-districts-lines', 'country-label-sm');
+					map.moveLayer('texas-school-districts-lines', 'hillshade_highlight_bright');
 					map.moveLayer('texas-school-districts-poly', 'texas-school-districts-lines');
 					for (i=0; i < loadedLineLayers.length; i++) {
 						if (loadedLineLayers[i][1] !== "texas_school_districts") {
@@ -73,8 +75,8 @@
 				}
 				map.setLayoutProperty(sourceID + '-poly', 'visibility', 'none');
 // IMPORTANT: these paint properties define the appearance of the mask layer that deemphasises districts outside the one we've zoomed to.  They will overrule anything that's set when that mask layer was loaded.
-				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(200, 200, 200, 0.5)');
-				map.setPaintProperty(sourceID + '-lines', 'line-color', 'rgba(50, 50, 50, .7)');
+				map.setPaintProperty(sourceID + '-poly', 'fill-color', 'rgba(160, 160, 160, 0.7)');
+				map.setPaintProperty(sourceID + '-lines', 'line-color', 'rgba(126, 126, 126, 0.7)');
 			}
 
 			function getPolygons(sourceID, nameField) {
@@ -364,7 +366,7 @@ map.on('load', function () {
 				 'fill-outline-color': 'rgba(200, 100, 240, 0)'
 			}
 		},
-		'country-label-sm'
+		'hillshade_highlight_bright'
 	);
 
 				addVectorLayer(
@@ -398,8 +400,8 @@ map.on('load', function () {
 						'legendID': 'pre-k-nodata',
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-nodata-poly',
-						'polygonFillColor': 'rgba(124, 124, 124, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonFillColor': 'rgba(124, 124, 124, 0.85)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 0.85)',
 						'usedInZoomControl': true
 					}
 				);
@@ -415,8 +417,8 @@ map.on('load', function () {
 						'legendID': 'pre-k-halfday',
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-halfday-poly',
-						'polygonFillColor': 'rgba(254, 217, 144, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonFillColor': 'rgba(254, 217, 144, 0.85)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 0.85)',
 						'usedInZoomControl': true
 					}
 				);
@@ -433,8 +435,8 @@ map.on('load', function () {
 						'legendID': 'pre-k-full-and-half-day',
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-full-and-half-day-poly',
-						'polygonFillColor': 'rgba(254, 155, 42, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonFillColor': 'rgba(254, 155, 42, 0.85)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 0.85)',
 						'usedInZoomControl': true
 					}
 				);
@@ -451,8 +453,8 @@ map.on('load', function () {
 						'legendID': 'pre-k-full-day-only',
 						'displayBehind': 'hillshade_highlight_bright',
 						'polygonLayerName': 'pre-k-full-day-only-poly',
-						'polygonFillColor': 'rgba(211, 92, 13, 100)',
-						'polygonOutlineColor': 'rgba(103, 65, 30, 80)',
+						'polygonFillColor': 'rgba(211, 92, 13, 0.85)',
+						'polygonOutlineColor': 'rgba(103, 65, 30, 0.85)',
 						'usedInZoomControl': true
 					}
 				);
